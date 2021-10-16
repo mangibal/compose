@@ -8,6 +8,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -27,18 +29,15 @@ class MainActivity : ComponentActivity() {
             ComposePlaygroundTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MessageCard(msg = MessageEntity("Android", "Jetpack Compose"))
-//                    Greeting("Android")
+                    Conversation(SampleData.conversationSample)
                 }
             }
         }
     }
 }
 
-data class MessageEntity(val author: String, val body: String)
-
 @Composable
-fun MessageCard(msg: MessageEntity) {
+fun MessageCard(msg: Message) {
     // Add padding around our message
     Row(modifier = Modifier.padding(all = 8.dp)) {
         Image(
@@ -64,13 +63,22 @@ fun MessageCard(msg: MessageEntity) {
             // Add a vertical space between the author and message texts
             Spacer(modifier = Modifier.height(4.dp))
 
-            Surface(shape = MaterialTheme.shapes.medium, elevation = 1.dp) {
+            Surface(shape = MaterialTheme.shapes.medium, elevation = 2.dp) {
                 Text(
                     text = msg.body,
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.padding(4.dp)
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun Conversation(message: List<Message>) {
+    LazyColumn {
+        items(message) { message ->
+            MessageCard(msg = message)
         }
     }
 }
@@ -83,23 +91,7 @@ fun MessageCard(msg: MessageEntity) {
 )
 @Composable
 fun PreviewMessageCard() {
-    MessageCard(
-        msg = MessageEntity(
-            "Colleague",
-            "Hey, take a look at Jetpack Compose, it's great!"
-        )
-    )
+    ComposePlaygroundTheme {
+        Conversation(SampleData.conversationSample)
+    }
 }
-
-//@Composable
-//fun Greeting(name: String) {
-//    Text(text = "Hello $name!")
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    ComposePlaygroundTheme {
-//        Greeting("Android")
-//    }
-//}
